@@ -62,7 +62,7 @@ Works well with nonlinear relationships
 
 Reduces overfitting
 
-
+---
 
 ⚙ Installation
 
