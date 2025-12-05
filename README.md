@@ -70,6 +70,7 @@ git clone https://github.com/your-username/Heart-Disease-Prediction.git
 cd Heart-Disease-Prediction
 
 python -m venv venv
+
 venv\Scripts\activate
 
 pip install pandas numpy scikit-learn flask joblib matplotlib seaborn
