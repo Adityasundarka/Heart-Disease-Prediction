@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Disease Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #edf2f7;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 10px;
+    }
+    .container {
+      background: #ffffff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 900px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    p.subtitle {
+      text-align: center;
+      margin-top: 0;
+      color: #555;
+      font-size: 14px;
+    }
+    form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 20px;
+      margin-top: 20px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+    label {
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    input, select {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e0;
+      font-size: 14px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #3182ce;
+      box-shadow: 0 0 0 1px rgba(49,130,206,0.3);
+    }
+    .full-row {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-top: 10px;
+    }
+    button {
+      background: #2b6cb0;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #2c5282;
+    }
+    .result {
+      margin-top: 18px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #718096;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Heart Disease Prediction</h1>
+    <p class="subtitle">Enter patient details (encoded like the dataset) to predict risk.</p>
+
+    <form action="/predict" method="post">
+      <div class="field">
+        <label>Age</label>
+        <input type="number" step="1" name="age" required>
+      </div>
+
+      <div class="field">
+        <label>Sex</label>
+        <select name="sex" required>
+          <option value="1">Male (1)</option>
+          <option value="0">Female (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Chest Pain Type (cp)</label>
+        <select name="cp" required>
+          <option value="0">0: Typical angina</option>
+          <option value="1">1: Atypical angina</option>
+          <option value="2">2: Non-anginal pain</option>
+          <option value="3">3: Asymptomatic</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Resting BP (trestbps)</label>
+        <input type="number" step="1" name="trestbps" required>
+      </div>
+
+      <div class="field">
+        <label>Cholesterol (chol)</label>
+        <input type="number" step="1" name="chol" required>
+      </div>
+
+      <div class="field">
+        <label>Fasting Blood Sugar &gt; 120 (fbs)</label>
+        <select name="fbs" required>
+          <option value="1">Yes (1)</option>
+          <option value="0">No (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Resting ECG (restecg)</label>
+        <select name="restecg" required>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Max Heart Rate (thalach)</label>
+        <input type="number" step="1" name="thalach" required>
+      </div>
+
+      <div class="field">
+        <label>Exercise Induced Angina (exang)</label>
+        <select name="exang" required>
+          <option value="1">Yes (1)</option>
+          <option value="0">No (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>ST Depression (oldpeak)</label>
+        <input type="number" step="0.1" name="oldpeak" required>
+      </div>
+
+      <div class="field">
+        <label>Slope of ST (slope)</label>
+        <select name="slope" required>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Number of Vessels (ca)</label>
+        <select name="ca" required>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Thal</label>
+        <select name="thal" required>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="full-row">
+        <button type="submit">Predict</button>
+      </div>
+    </form>
+
+    {% if prediction_text %}
+      <div class="result" style="color: {{ result_color }};">
+        {{ prediction_text }}
+      </div>
+    {% endif %}
+
+    <div class="note">
+      Note: Inputs must follow the same numeric encoding as the training dataset.
+    </div>
+  </div>
+</body>
+</html>
